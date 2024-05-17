@@ -41,25 +41,29 @@ if features and label:
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
 
-    K_min = st.number_input('Mininum K ', min_value = 1 , max_value = 10)
-    K_max = st.number_input('Maximum K', min_value = 1 , max_value = 15)
-    if K_min >= K_max:
+    k_min = st.number_input('Mininum K ', min_value = 1 , max_value = 10)
+    k_max = st.number_input('Maximum K', min_value = 1 , max_value = 15)
+    if k_min >= k_max:
         st.error('Maximum K must be greater than minimum K')
     else:
-       K_range = range(K_min , K_max + 1 )
-       K_range_list = list(K_range)
+        k_range = range(k_min , k_max + 1 )
+        # K_range_list = list(K_range)
 
-       cv_scores = []
-       for K in K_range:
-          knn = KNeighborsClassifier(n_neighbors=K)
-          scores = cross_val_score(knn ,X,y,cv = 5, scoring = 'accuracy')
+    cv_scores = []
+    for k in k_range:
+          knn = KNeighborsClassifier(n_neighbors=k)
+          scores = cross_val_score(knn ,X,y,cv = 10, scoring = 'accuracy')
           cv_scores.append(scores.mean())
-    K_range_list = list(K_range)
-if len(K_range_list) == len(cv_scores):
+    
+    k_range_list = list(k_range)
+           
+    if len(k_range_list) == len(cv_scores):
 
-          optimal_K = K_range[np.argmax(cv_scores)]
-          st.write(f'the optimal number of neighbors is',{optimal_K})
+            optimal_k = k_range[np.argmax(cv_scores)]
+            st.write(f'the optimal number of neighbors is',{optimal_k})
 
-          plot_cv_results(K_range, cv_scores)
+            plot_cv_results(k_range_list, cv_scores)
+    else:
+            st.error("Error in cross-validation: k_range_list and cv_scores length mismatch.")
 else:
-    st.error("Error in cross-validation: k_range_list and cv_scores length mismatch.")
+    st.warning("Please select both features and target variable.")
