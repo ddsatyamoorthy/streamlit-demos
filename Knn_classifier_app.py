@@ -23,6 +23,8 @@ df['Fare'].fillna(df['Fare'].median(), inplace=True)
 le = LabelEncoder()
 df['Gender'] = le.fit_transform(df['Gender'])
 
+
+
 features = st.multiselect("Select features for the model:", options=df.columns.tolist(), default=['Class', 'Age', 'Fare', 'Gender' ])
 # st.write("Selected features:")
 # st.write(features)
@@ -43,6 +45,20 @@ y_pred = model.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
 cm = confusion_matrix(y_test, y_pred)
+
+# Define the confusion matrix
+confusion_matrix = np.array([[134, 10],
+                            [72, 46]])
+
+# Extracting values
+TN, FN,FP,TP = confusion_matrix.ravel()
+
+# Printing the values
+print(f"True Negatives (TN): {TN}")
+print(f"False Positives (FP): {FP}")
+print(f"False Negatives (FN): {FN}")
+print(f"True Positives (TP): {TP}")
+
 
 st.write(f"Accuracy: {accuracy:.2f}")
 st.write("Confusion Matrix:")
